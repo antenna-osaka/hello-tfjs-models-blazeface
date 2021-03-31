@@ -22,3 +22,22 @@ body{
   width:50vw;
   height:calc( 50vw / 640 * 480 );
 }
+
+
+@media screen and (max-width:768px){
+  .p-camera{
+    left:0;
+    top:0;
+    width:100vw;
+    height:calc( 100vw / 640 * 480 );
+  }
+  .p-view{
+    left:0;
+    top:calc( 100vw / 640 * 480 );
+    width:100vw;
+    height:calc( 100vw / 640 * 480 );
+  }
+
+}
+
+
