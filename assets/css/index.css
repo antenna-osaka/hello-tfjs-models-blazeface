@@ -1,0 +1,24 @@
+
+
+/*
+640x480をベースにする
+*/
+
+body{
+  position:relative;
+}
+.p-camera{
+  position:absolute;
+  left:0;
+  top:0;
+  width:50vw;
+  height:calc( 50vw / 640 * 480 );
+}
+
+.p-view{
+  position:absolute;
+  left:50vw;
+  top:0;
+  width:50vw;
+  height:calc( 50vw / 640 * 480 );
+}
