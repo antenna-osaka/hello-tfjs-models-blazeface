@@ -1,6 +1,10 @@
 const WIDTH=640;
 const HEIGHT=480;
 
+//https://github.com/twitter/twemoji
+//クロスオリジンの問題で直接参照できない。ダウンロードして使う。
+const EMOJI_URL="assets/img/twemoji/1f604.png";
+
 class App{
   constructor({video,view}){
     this.video=video;
@@ -31,7 +35,11 @@ class App{
     })
     this.video.play();
   }
+  async setupEmojiAsync(){
+    this.emojiTexture = PIXI.Texture.from(EMOJI_URL);
+  }
   async setupAsync(){
+    await this.setupEmojiAsync();
     await this.setupStatsAsync();
     await this.setupTensorflowAsync();
 
@@ -48,6 +56,10 @@ class App{
 
     this.graphics=new PIXI.Graphics();
     this.stage.addChild(this.graphics);
+
+    this.faceContainer=new PIXI.Container();
+    this.stage.addChild(this.faceContainer);
+
     
 
     const animate=async ()=>{
@@ -69,7 +81,7 @@ class App{
     document.body.removeChild( this.stats.dom );
   }
   async destroyTensorflowAsync(){
-    //必要ある？
+    //何もしない
   }
   async destroyVideoAsync(){
     const tracks = this.mediaStream.getTracks();
@@ -77,11 +89,15 @@ class App{
       track.stop();
     }
   }
+  async destroyEmojiAsync(){
+    //何もしない
+  }
   async destroyAsync(){
     this.needsStopUpdate = true;
     await this.destroyVideoAsync();
     await this.destroyTensorflowAsync();
     await this.destoryStatsAsync();
+    await this.destroyEmojiAsync();
   }
 
   async updateAsync(){
@@ -89,6 +105,7 @@ class App{
     const predictions = await this.model.estimateFaces(this.video, returnTensors);
   
     this.graphics.clear();
+    this.faceContainer.removeChildren();
 
     const getRect=(prediction)=>{
       const {topLeft,bottomRight}=prediction;
@@ -105,10 +122,25 @@ class App{
       this.graphics.beginFill(0xff0000,0.5);
       this.graphics.drawRect(x,y,width,height);
     };
+    const drawEmoji=(rect)=>{
+      const emojiSprite=new PIXI.Sprite(this.emojiTexture);
+      const length=Math.max(rect.width,rect.height);
+      const center={
+        x:rect.x+rect.width/2,
+        y:rect.y+rect.height/2,
+      }
+      emojiSprite.anchor.set(0.5,0.5);
+      emojiSprite.width=length;
+      emojiSprite.height=length;
+      emojiSprite.position.copyFrom(center);
+
+      this.faceContainer.addChild(emojiSprite);
+    };
 
     for(let prediction of predictions){
       const rect=getRect(prediction);
-      drawRect(rect);
+      // drawRect(rect);
+      drawEmoji(rect);
     }
     this.renderer.render(this.stage);
   
