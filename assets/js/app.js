@@ -62,6 +62,9 @@ class App{
     
 
     const animate=async ()=>{
+      if(this.needsStopUpdate){
+        return;
+      }
       this.stats.begin();
       try{
         await this.updateAsync();
@@ -87,6 +90,7 @@ class App{
     for(let track of tracks){
       track.stop();
     }
+    this.video.srcObject=null;
   }
   async destroyAsync(){
     this.needsStopUpdate = true;
