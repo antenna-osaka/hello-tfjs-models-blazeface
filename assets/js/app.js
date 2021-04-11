@@ -53,13 +53,8 @@ class App{
     this.videoSprite=PIXI.Sprite.from(this.video);
     this.stage.addChild(this.videoSprite);
 
-    this.graphics=new PIXI.Graphics();
-    this.stage.addChild(this.graphics);
-
     this.faceContainer=new PIXI.Container();
     this.stage.addChild(this.faceContainer);
-
-    
 
     const animate=async ()=>{
       if(this.needsStopUpdate){
@@ -103,7 +98,6 @@ class App{
     const returnTensors = false;
     const predictions = await this.model.estimateFaces(this.video, returnTensors);
   
-    this.graphics.clear();
     this.faceContainer.removeChildren();
 
     const getRect=(prediction)=>{
@@ -114,12 +108,6 @@ class App{
       const height=bottom-top;
       const rect={x:left,y:top,width,height};
       return rect;
-    };
-
-    const drawRect=(rect)=>{
-      const {x,y,width,height}=rect;
-      this.graphics.beginFill(0xff0000,0.5);
-      this.graphics.drawRect(x,y,width,height);
     };
     const drawEmoji=(rect)=>{
       const emojiSprite=new PIXI.Sprite(this.emojiTexture);
@@ -138,7 +126,6 @@ class App{
 
     for(let prediction of predictions){
       const rect=getRect(prediction);
-      // drawRect(rect);
       drawEmoji(rect);
     }
     this.renderer.render(this.stage);
