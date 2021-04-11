@@ -79,7 +79,7 @@ class App{
     animate();
     
   }
-  async destoryStats(){
+  async destroyStats(){
     document.body.removeChild( this.stats.dom );
   }
   async destroyTensorflowAsync(){
@@ -96,7 +96,7 @@ class App{
     this.needsStopUpdate = true;
     await this.destroyVideoAsync();
     await this.destroyTensorflowAsync();
-    this.destoryStats();
+    this.destroyStats();
   }
 
   async updateAsync(){
