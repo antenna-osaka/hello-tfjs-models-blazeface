@@ -35,11 +35,10 @@ class App{
     })
     this.video.play();
   }
-  async setupEmojiAsync(){
-    this.emojiTexture = PIXI.Texture.from(EMOJI_URL);
-  }
   async setupAsync(){
-    await this.setupEmojiAsync();
+
+    this.emojiTexture = PIXI.Texture.from(EMOJI_URL);
+
     await this.setupStatsAsync();
     await this.setupTensorflowAsync();
 
@@ -89,15 +88,11 @@ class App{
       track.stop();
     }
   }
-  async destroyEmojiAsync(){
-    //何もしない
-  }
   async destroyAsync(){
     this.needsStopUpdate = true;
     await this.destroyVideoAsync();
     await this.destroyTensorflowAsync();
     await this.destoryStatsAsync();
-    await this.destroyEmojiAsync();
   }
 
   async updateAsync(){
