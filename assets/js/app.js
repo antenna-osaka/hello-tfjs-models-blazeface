@@ -12,7 +12,7 @@ class App{
     this.needsStopUpdate = false;
     this.promiseSetup = this.setupAsync();
   }
-  async setupStatsAsync(){
+  async setupStats(){
     this.stats = new Stats();
     document.body.appendChild( this.stats.dom );
   }
@@ -39,7 +39,7 @@ class App{
 
     this.emojiTexture = PIXI.Texture.from(EMOJI_URL);
 
-    await this.setupStatsAsync();
+    this.setupStats();
     await this.setupTensorflowAsync();
 
     await this.setupVideoAsync();
@@ -76,7 +76,7 @@ class App{
     animate();
     
   }
-  async destoryStatsAsync(){
+  async destoryStats(){
     document.body.removeChild( this.stats.dom );
   }
   async destroyTensorflowAsync(){
@@ -92,7 +92,7 @@ class App{
     this.needsStopUpdate = true;
     await this.destroyVideoAsync();
     await this.destroyTensorflowAsync();
-    await this.destoryStatsAsync();
+    this.destoryStats();
   }
 
   async updateAsync(){
